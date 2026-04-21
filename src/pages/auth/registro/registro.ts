@@ -1,50 +1,69 @@
-// 1. Inyectamos el formulario al HTML
+// 1. Definimos la Interface (Obligatorio en TS)
+interface IUser {
+    id: number;
+    nombre: string;
+    email: string;
+    password: string;
+    role: 'client' | 'admin'; 
+}
+
 const app = document.getElementById("app") as HTMLDivElement;
 
-app.innerHTML += `
-    <form id="formRegistro">
+// Inyectamos de forma segura
+app.innerHTML = `
+    <form id="formRegistro" class="form-container">
+        <h2>Registro de Usuario</h2>
+        <div>
+            <label>Nombre:</label>
+            <input type="text" id="nombre" required minlength="3">
+        </div>
         <div>
             <label>Email:</label>
-            <input type="email" id="email" required placeholder="correo@ejemplo.com">
+            <input type="email" id="email" required>
         </div>
         <div>
             <label>Contraseña:</label>
-            <input type="password" id="password" required placeholder="********">
+            <input type="password" id="password" required>
         </div>
         <button type="submit">Registrar Usuario</button>
     </form>
 `;
 
-// 2. Lógica para capturar y guardar en el Array
 const form = document.getElementById("formRegistro") as HTMLFormElement;
 
 form.addEventListener("submit", (e: Event) => {
     e.preventDefault();
 
+    // Captura de elementos con tipado
+    const nombreInput = document.getElementById("nombre") as HTMLInputElement;
     const emailInput = document.getElementById("email") as HTMLInputElement;
     const passwordInput = document.getElementById("password") as HTMLInputElement;
 
-    // Creamos el objeto del nuevo usuario
-    const nuevoUsuario = {
-        email: emailInput.value,
-        password: passwordInput.value, // Capturamos contraseña como pide el ejercicio
-        id: Date.now() // Un ID único opcional para identificarlo
+    // 2. Procesamiento seguro de datos
+    const nuevoUsuario: IUser = {
+        id: Date.now(),
+        nombre: nombreInput.value.trim(),
+        email: emailInput.value.trim().toLowerCase(),
+        password: passwordInput.value, // es deberia jasheear
+        role: 'client' // Rol por defecto según el PDF
     };
 
-    // 3. Manejo del Array en localStorage bajo la clave "users"
+    // 3. Persistencia en localStorage
     const dataGuardada = localStorage.getItem("users");
+    const listaUsuarios: IUser[] = dataGuardada ? JSON.parse(dataGuardada) : [];
+
+    // Validación: ¿Ya existe el mail?
+    const existe = listaUsuarios.some(u => u.email === nuevoUsuario.email);
     
-    // Si ya hay usuarios, los traemos; si no, creamos un array vacío
-    const listaUsuarios = dataGuardada ? JSON.parse(dataGuardada) : [];
+    if (existe) {
+        alert("Este correo ya está registrado");
+        return;
+    }
 
-    // Agregamos el nuevo objeto al array
     listaUsuarios.push(nuevoUsuario);
-
-    // Guardamos el array actualizado
     localStorage.setItem("users", JSON.stringify(listaUsuarios));
 
-    alert("Usuario guardado en el array de localStorage");
+    alert("Usuario registrado con éxito");
     form.reset();
-    
-    console.log("Estado actual de 'users':", listaUsuarios);
+    console.log("Usuarios en Storage:", listaUsuarios);
 });

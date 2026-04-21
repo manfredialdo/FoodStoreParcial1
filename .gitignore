@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
 node_modules
 dist
 dist-ssr
@@ -39,3 +38,21 @@ historial_comandos.txt
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# Archivos de entorno (FUNDAMENTAL para seguridad)
+.env
+.env.test
+.env.production
+*.env.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Archivos de caché de herramientas
+.eslintcache
+.stylelintcache
+
+# Archivos temporales de sistema (específicos de Windows/Office)
+Thumbs.db
+~$*
