@@ -39,13 +39,13 @@ form.addEventListener("submit", (e: Event) => {
     const emailInput = document.getElementById("email") as HTMLInputElement;
     const passwordInput = document.getElementById("password") as HTMLInputElement;
 
-    // 2. Procesamiento seguro de datos
+    // 2. Procesamiento
     const nuevoUsuario: IUser = {
         id: Date.now(),
         nombre: nombreInput.value.trim(),
         email: emailInput.value.trim().toLowerCase(),
         password: passwordInput.value, // es deberia jasheear
-        role: 'client' // Rol por defecto según el PDF
+        role: 'client' // Rol por defecto según el TP
     };
 
     // 3. Persistencia en localStorage
