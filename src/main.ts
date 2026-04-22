@@ -1,20 +1,18 @@
 // src/main.ts
-
 import type { IUser } from "./types/IUser";
 
 const checkAuth = (): void => {
-  // 1. Obtenemos la ruta actual
   const currentPath = window.location.pathname;
   
-  // 2. Traemos los datos del usuario del localStorage
   const userDataJSON = localStorage.getItem("userData");
   const user: IUser | null = userDataJSON ? JSON.parse(userDataJSON) : null;
 
-  // --- LÓGICA DE VALIDACIÓN ---
+  // A. Si no hay sesión y no está intentando loguearse o registrarse
+  // Agregamos registro.html para que no te rebote si te querés registrar
+  const isAuthPage = currentPath.includes("login.html") || currentPath.includes("registro.html");
 
-  // A. Si no hay sesión y no está en el login, mandarlo al login
-  if (!user && !currentPath.includes("login.html") && currentPath !== "/") {
-    window.location.href = "/src/pages/login/login.html";
+  if (!user && !isAuthPage && currentPath !== "/") {
+    window.location.href = "/src/pages/auth/login/login.html";
     return;
   }
 
@@ -22,11 +20,16 @@ const checkAuth = (): void => {
   if (user && currentPath.includes("/admin/")) {
     if (user.role !== "admin") {
       console.warn("Acceso denegado: Se requiere rol de Admin");
-      // Redirigir a su zona permitida o al login
+      // Redirigir a la zona de cliente si es un intruso
       window.location.href = "/src/pages/client/home/home.html";
     }
   }
+
+  // C. Si ya está logueado e intenta ir al login, mandarlo a su home
+  if (user && isAuthPage) {
+    const target = user.role === "admin" ? "/src/pages/admin/home/home.html" : "/src/pages/client/home/home.html";
+    window.location.href = target;
+  }
 };
 
-// Ejecutar la validación inmediatamente al cargar el script
 checkAuth();
