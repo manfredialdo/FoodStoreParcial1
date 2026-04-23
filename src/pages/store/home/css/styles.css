@@ -1,0 +1,75 @@
+/* 1. VARIABLES Y RESET */
+:root {
+    --color-primario: #ff6347;
+    --color-fondo: #20232a;
+    --color-texto: #ffffff;
+    --color-aqua: aqua;
+    --color-focus: #ff4500;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    text-align: center; /* Centra textos de h1, p y títulos */
+}
+
+/* 2. TIPOGRAFÍA Y ENLACES */
+h1 { 
+    color: var(--color-aqua); 
+    text-transform: uppercase; 
+    margin: 20px 0; 
+}
+
+a { color: var(--color-aqua); text-decoration: none; font-weight: bold; }
+a:hover { color: white; }
+
+/* 3. CONTENEDORES FLEX */
+nav, #lista-categorias, form, #contenedor-productos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    list-style: none;
+}
+
+/* 4. COMPONENTES ESPECÍFICOS */
+input { padding: 10px; border-radius: 5px; border: none; width: 250px; }
+
+.tarjeta {
+    background: #2c2f36;
+    width: 240px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
+
+/* 5. BOTONES */
+button, .btn-agregar {
+    background: var(--color-primario);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover, .btn-agregar:hover { background: var(--color-focus); }
+
+/* 6. FOOTER */
+footer {
+    padding: 30px;
+    border-top: 1px solid #444;
+    color: #888;
+    font-size: 0.8rem;
+}
