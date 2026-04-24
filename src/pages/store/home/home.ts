@@ -1,6 +1,6 @@
 // lógica: render, búsqueda, filtros
 import { ICategory, IProduct } from "./types/modelos";
-import { categorias, menu } from "./data/data"; // Tus arrays de datos
+import { categorias, menu } from "../../../../data"; // Tus arrays de datos
 
 const cargarCategorias = (lista: ICategory[]): void => {
     const ul = document.getElementById("lista-categorias") as HTMLUListElement;
