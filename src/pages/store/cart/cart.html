@@ -16,14 +16,28 @@
             </nav>
         </header>
         <!-- vista del carrito -->
-
-        <main class="carrito-layout">
-            <section id="contenedor-carrito"></section> <aside class="resumen-compra">
-                <h2>Resumen</h2>
-                <p>Subtotal: <span id="subtotal">$0</span></p>
-                <p><strong>Total: <span id="total-final">$0</span></strong></p>
-                <button id="btn-finalizar" class="btn-agregar">Finalizar compra</button>
-                <button id="btn-vaciar" style="background:none; border:1px solid var(--color-primario); color:var(--color-primario); margin-top:10px; cursor:pointer; padding:5px; border-radius:5px;">Vaciar carrito</button>
+        <main id="contenedor-productos">
+    
+            <section id="contenedor-carrito">
+                </section>
+        
+            <aside class="tarjeta">
+                <h2 class="tarjeta-titulo">Resumen</h2>
+                
+                <div class="tarjeta-descripcion">
+                    <p>Subtotal: <span id="subtotal">$0</span></p>
+                    <p><strong>Total: <span id="total-final">$0</span></strong></p>
+                </div>
+        
+                <div class="tarjeta-footer">
+                    <button id="btn-finalizar" class="btn-agregar">
+                        Finalizar
+                    </button>
+                    
+                    <button id="btn-vaciar" class="btn-agregar" style="background: var(--color-primario);">
+                        Vaciar
+                    </button>
+                </div>
             </aside>
         </main>
         

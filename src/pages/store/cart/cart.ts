@@ -1,7 +1,6 @@
 // lógica: render, cantidades, total
 import type { Product as IProduct } from "../../../types/product";
 
-// Definimos la extensión aquí mismo para que el carrito sepa manejar 'cantidad'
 interface ICartItem extends IProduct {
     cantidad: number;
 }
@@ -29,84 +28,67 @@ const renderCarrito = () => {
         acumulado += item.precio * item.cantidad;
         
         const card = document.createElement("article");
-        card.className = "tarjeta";
-        // Estilos inline para mantener la estructura horizontal de la captura
-        card.style.flexDirection = "row";
-        card.style.width = "100%";
-        card.style.marginBottom = "10px";
-        card.style.alignItems = "center";
-        card.style.gap = "15px";
+        card.className = "tarjeta"; // Hereda fondo, padding y borde del CSS
 
-        // 1. Imagen
+        // 1. Imagen (Usa la clase del CSS para tamaño y ajuste)
         const img = document.createElement("img");
+        img.className = "tarjeta-img"; 
         img.src = `/${item.imagen}`;
-        img.style.width = "60px";
-        img.style.height = "60px";
-        img.style.objectFit = "contain";
-        img.style.borderRadius = "8px";
 
-        // 2. Info (Nombre y Subtotal)
-        const infoDiv = document.createElement("div");
-        infoDiv.style.flexGrow = "1";
-
+        // 2. Título
         const nombre = document.createElement("h3");
-        nombre.style.fontSize = "1rem";
+        nombre.className = "tarjeta-titulo";
         nombre.textContent = item.nombre;
 
+        // 3. Info de precio
         const subtotal = document.createElement("p");
-        subtotal.style.color = "var(--color-gris)";
-        subtotal.style.fontSize = "0.85rem";
-        subtotal.textContent = `Subtotal: $${item.precio * item.cantidad}`;
+        subtotal.className = "tarjeta-descripcion";
+        subtotal.textContent = `Cantidad: ${item.cantidad} - Subtotal: $${item.precio * item.cantidad}`;
 
-        infoDiv.append(nombre, subtotal);
-
-        // 3. Controles
+        // 4. Controles (Footer de tarjeta usa flex y justify-content)
         const controles = document.createElement("div");
         controles.className = "tarjeta-footer";
-        controles.style.gap = "10px";
 
         const btnMenos = document.createElement("button");
+        btnMenos.className = "btn-agregar";
         btnMenos.textContent = "-";
-        btnMenos.className = "btn-cantidad";
         btnMenos.dataset.id = item.id.toString();
         btnMenos.dataset.op = "restar";
-        btnMenos.style.cssText = "background:#444; color:white; border:none; padding:5px 12px; border-radius:5px; cursor:pointer;";
-
-        const cantSpan = document.createElement("span");
-        cantSpan.textContent = item.cantidad.toString();
-        cantSpan.style.fontWeight = "bold";
 
         const btnMas = document.createElement("button");
+        btnMas.className = "btn-agregar";
         btnMas.textContent = "+";
-        btnMas.className = "btn-cantidad";
         btnMas.dataset.id = item.id.toString();
         btnMas.dataset.op = "sumar";
-        btnMas.style.cssText = "background:#444; color:white; border:none; padding:5px 12px; border-radius:5px; cursor:pointer;";
 
         const btnEliminar = document.createElement("button");
+        btnEliminar.className = "btn-agregar";
         btnEliminar.textContent = "Eliminar";
-        btnEliminar.className = "btn-eliminar";
         btnEliminar.dataset.id = item.id.toString();
-        btnEliminar.style.cssText = "color:var(--color-primario); background:none; border:none; cursor:pointer; font-size:0.8rem; margin-left:10px;";
+        // Estilo mínimo para diferenciar el botón de borrado
+        btnEliminar.style.background = "var(--color-primario)";
 
-        controles.append(btnMenos, cantSpan, btnMas, btnEliminar);
+        controles.append(btnMenos, btnMas, btnEliminar);
 
-        card.append(img, infoDiv, controles);
+        // Armado sin estilos inline
+        card.append(img, nombre, subtotal, controles);
         contenedor.append(card);
     });
 
     totalTxt.textContent = `$${acumulado}`;
 };
 
-// Delegación de eventos
+// Delegación de eventos (Misma lógica, cero basura visual)
 document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     let carrito: ICartItem[] = JSON.parse(localStorage.getItem("carrito") || "[]");
 
-    const btnCant = target.closest(".btn-cantidad") as HTMLButtonElement;
-    if (btnCant) {
-        const id = Number(btnCant.dataset.id);
-        const op = btnCant.dataset.op;
+    const btnCant = target.closest(".btn-cantidad") || target.closest(".btn-agregar");
+    const el = btnCant as HTMLElement;
+
+    if (el && el.dataset.id && el.dataset.op) {
+        const id = Number(el.dataset.id);
+        const op = el.dataset.op;
         
         carrito = carrito.map(item => {
             if (item.id === id) {
@@ -119,9 +101,8 @@ document.addEventListener("click", (e) => {
         renderCarrito();
     }
 
-    const btnEliminar = target.closest(".btn-eliminar") as HTMLButtonElement;
-    if (btnEliminar) {
-        const id = Number(btnEliminar.dataset.id);
+    if (el && el.textContent === "Eliminar") {
+        const id = Number(el.dataset.id);
         carrito = carrito.filter(item => item.id !== id);
         localStorage.setItem("carrito", JSON.stringify(carrito));
         renderCarrito();
