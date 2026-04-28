@@ -2,7 +2,6 @@
 import type { Product } from "../types/product";
 import type { Icategoria } from "../types/categoria";
 
-
 const categorias: Icategoria[] = [
   {
     id: 1,
@@ -292,7 +291,7 @@ export const PRODUCTS: Product[] = [
 ]
  
 
-export function getCategories(): ICategory[] {
+export function getCategories(): Icategoria[] {
   return categorias.filter((c) => !c.eliminado);
 }
 

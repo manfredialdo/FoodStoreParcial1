@@ -59,7 +59,7 @@ const mostrarMenu = (datos: IProduct[]): void => {
 
         const img = document.createElement("img");
         // USAMOS p.imagen que es lo que tiene el profe
-        img.src = p.imagen || "placeholder.jpg"; 
+        img.src = p.imagen || "pizza.jpg"; 
         // USAMOS p.nombre porque p.title NO EXISTE en el data.ts del profe
         img.alt = p.nombre; 
         

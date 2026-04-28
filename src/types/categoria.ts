@@ -1,8 +1,10 @@
 // interface Icategoria
-export interface Icategoria {
+// src/types/categoria.ts
+export interface Icategoria {  
   id: number;
-  nombre: string;     
+  nombre: string;
   eliminado: boolean;
   createdAt: string;
   descripcion: string;
 }
+export type ICategory = Icategoria;
