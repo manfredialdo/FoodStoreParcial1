@@ -68,16 +68,28 @@ El mecanismo es simple y se gestiona desde el código TypeScript en la carpeta `
 
 ```
 /
+/
 ├── src/
-│   ├── pages/                # Contiene las páginas de la aplicación
-│   │   ├── admin/            # Páginas solo para administradores
-│   │   ├── auth/             # Páginas de autenticación (login, registro)
-│   │   └── client/           # Páginas solo para clientes
-│   ├── types/                # Define las interfaces y tipos (IUser, Rol)
-│   └── utils/                # Lógica reutilizable
-│       ├── auth.ts           # Función principal de verificación de rol y sesión
-│       ├── localStorage.ts   # Funciones para leer/escribir en localStorage
-│       └── navigate.ts       # Función para redirigir al usuario
-├── package.json              # Dependencias y scripts
-└── README.md                 # Este archivo
-```
+│   ├── data/
+│   │   └── data.ts              # Fuente de datos: PRODUCTS y getCategories()
+│   ├── pages/
+│   │   ├── admin/               # Vistas y lógica exclusivas para administradores
+│   │   ├── auth/                # Gestión de autenticación (Login, Registro)
+│   │   ├── client/              # Vistas privadas para clientes registrados
+│   │   └── store/               # Módulos públicos de la tienda
+│   │       ├── home/
+│   │       │   ├── home.html    # Maquetación del catálogo de productos
+│   │       │   └── home.ts      # Lógica: renderizado, búsqueda y filtros
+│   │       └── cart/
+│   │           ├── cart.html    # Vista del carrito de compras
+│   │           └── cart.ts      # Lógica: gestión de cantidades, totales y pedidos
+│   ├── types/                   # Definición de interfaces y tipos globales
+│   │   ├── product.ts           # Interfaces Product y CartItem
+│   │   ├── categoria.ts         # Interface ICategoria
+│   │   └── user.ts              # Interfaces IUser y Rol
+│   └── utils/                   # Funciones auxiliares y lógica reutilizable
+│       ├── auth.ts              # Verificación de rol, sesión y permisos
+│       ├── localStorage.ts      # Persistencia de datos (Carrito, Token, Usuario)
+│       └── navigate.ts          # Centralización de rutas y redirecciones
+├── package.json                 # Scripts y dependencias del proyecto
+└── README.md                    # Documentación principal```
