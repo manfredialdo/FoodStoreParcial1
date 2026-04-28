@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Food Store</title>
-        <link rel="stylesheet" href="src/style.css">
+        <link rel="stylesheet" href="../../../style.css">
     </head>
 
     <body>
@@ -17,14 +17,23 @@
         </header>
         <!-- vista del carrito -->
 
-
+        <main class="carrito-layout">
+            <section id="contenedor-carrito"></section> <aside class="resumen-compra">
+                <h2>Resumen</h2>
+                <p>Subtotal: <span id="subtotal">$0</span></p>
+                <p><strong>Total: <span id="total-final">$0</span></strong></p>
+                <button id="btn-finalizar" class="btn-agregar">Finalizar compra</button>
+                <button id="btn-vaciar" style="background:none; border:1px solid var(--color-primario); color:var(--color-primario); margin-top:10px; cursor:pointer; padding:5px; border-radius:5px;">Vaciar carrito</button>
+            </aside>
+        </main>
+        
         <footer>
             <p>© 2026 Food Store. Todos los derechos reservados.</p>
             <p>Contacto: info@foodstore.com</p>
         </footer>
     
 
-        <script src="./cart.js"></script>
+        <script type="module" src="./cart.ts"></script>
 
     </body>
 </html>

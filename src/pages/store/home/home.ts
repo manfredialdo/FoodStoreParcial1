@@ -47,58 +47,57 @@ const cargarCategorias = (productos: IProduct[]): void => {
 /**
  * Procedimiento mostrarMenu adaptado para no romperse
  */
+/**
+ * Renderiza las tarjetas de forma segura evitando XSS
+ */
 const mostrarMenu = (datos: IProduct[]): void => {
-    const contenedor = document.getElementById("contenedor-productos") as HTMLElement;
+    const contenedor = document.getElementById("contenedor-productos");
     if (!contenedor) return;
 
     contenedor.replaceChildren();
-        
-    datos.forEach((p) => {
+
+    datos.forEach(p => {
         const tarjeta = document.createElement("article");
         tarjeta.className = "tarjeta";
-    
-        // 1. Imagen
+
+        // Creamos cada elemento manualmente. 
+        // Usar .textContent es lo que nos da la seguridad total.
+        
         const img = document.createElement("img");
+        img.className = "tarjeta-img";
         img.src = `/${p.imagen}`;
         img.alt = p.nombre;
-        img.className = "tarjeta-img";
-    
-        // 2. Categoría (Estilo pequeño arriba)
+
         const pCat = document.createElement("p");
         pCat.className = "tarjeta-categoria";
         pCat.textContent = p.categorias?.[0]?.nombre.toUpperCase() || "PRODUCTO";
-    
-        // 3. Título
+
         const h3 = document.createElement("h3");
         h3.className = "tarjeta-titulo";
         h3.textContent = p.nombre;
-    
-        // 4. Descripción
+
         const pDesc = document.createElement("p");
         pDesc.className = "tarjeta-descripcion";
         pDesc.textContent = p.descripcion;
-    
-        // 5. Footer (Precio + Botón)
+
         const divFooter = document.createElement("div");
         divFooter.className = "tarjeta-footer";
-    
+
         const spanPrecio = document.createElement("span");
         spanPrecio.className = "tarjeta-precio";
         spanPrecio.textContent = `$${p.precio}`;
-    
+
         const btn = document.createElement("button");
         btn.className = "btn-agregar";
-        btn.innerHTML = `<span>+</span> Agregar`; // El símbolo + de tu captura
         btn.dataset.id = p.id.toString();
-    
+        btn.dataset.nombre = p.nombre;
+        // Para el botón, si querés el "+" usamos textContent y un span interno
+        btn.innerHTML = `<span>+</span> Agregar`; 
+
         divFooter.append(spanPrecio, btn);
-    
-        // Armado final de la tarjeta
         tarjeta.append(img, pCat, h3, pDesc, divFooter);
         contenedor.append(tarjeta);
     });
-
-
 };
 
 // Delegación de Eventos
