@@ -2,16 +2,10 @@
 import type { Product as IProduct } from "../../../types/product";
 import type { Icategoria as ICategory } from "../../../types/categoria";
 import { agregarProductoAlCarrito, getCarrito } from "../../../utils/localStorage";
-// import { getCarrito } from "../../../utils/localStorage";
-
-// 2. Datos (sin el .ts al final)
 import { PRODUCTS } from "../../../data/data";
 
-// 3. Tu lógica...
-console.log("¿Llegaron los productos?", PRODUCTS);
-
 /**
- * Función para renderizar las categorías en el menú lateral/superior
+ * Función para renderizar las categorías en el menú
  */
 const cargarCategorias = (productos: IProduct[]): void => {
     const ul = document.getElementById("lista-categorias") as HTMLUListElement;
@@ -19,7 +13,6 @@ const cargarCategorias = (productos: IProduct[]): void => {
 
     ul.replaceChildren();
 
-    // Como 'categorias' no está exportado en data.ts, las sacamos de los productos
     const categoriasMapa = new Map<number, ICategory>();
     
     productos.forEach(p => {
@@ -30,25 +23,27 @@ const cargarCategorias = (productos: IProduct[]): void => {
         }
     });
 
-    // Añadimos una opción para mostrar todos
+    // --- OPCIÓN "TODOS" ---
     const liTodos = document.createElement("li");
-    liTodos.innerHTML = `<a href="#" data-id="todos">Todos</a>`;
+    const aTodos = document.createElement("a");
+    aTodos.href = "#";
+    aTodos.textContent = "Todos";
+    aTodos.dataset.id = "todos"; 
+    liTodos.append(aTodos);
     ul.append(liTodos);
 
+    // --- RESTO DE CATEGORÍAS ---
     categoriasMapa.forEach(cat => {
         const li = document.createElement("li");
         const a = document.createElement("a");
         a.href = "#";
         a.textContent = cat.nombre;
-        a.dataset.id = cat.id.toString();
+        a.dataset.id = cat.id.toString(); 
         li.append(a);
         ul.append(li);
     });
 };
 
-/**
- * Procedimiento mostrarMenu adaptado para no romperse
- */
 /**
  * Renderiza las tarjetas de forma segura evitando XSS
  */
@@ -61,9 +56,6 @@ const mostrarMenu = (datos: IProduct[]): void => {
     datos.forEach(p => {
         const tarjeta = document.createElement("article");
         tarjeta.className = "tarjeta";
-
-        // Creamos cada elemento manualmente. 
-        // Usar .textContent es lo que nos da la seguridad total.
         
         const img = document.createElement("img");
         img.className = "tarjeta-img";
@@ -92,8 +84,6 @@ const mostrarMenu = (datos: IProduct[]): void => {
         const btn = document.createElement("button");
         btn.className = "btn-agregar";
         btn.dataset.id = p.id.toString();
-        btn.dataset.nombre = p.nombre;
-        // Para el botón, si querés el "+" usamos textContent y un span interno
         btn.innerHTML = `<span>+</span> Agregar`; 
 
         divFooter.append(spanPrecio, btn);
@@ -102,12 +92,11 @@ const mostrarMenu = (datos: IProduct[]): void => {
     });
 };
 
-// Delegación de Eventos
-// Delegación de Eventos
+// --- DELEGACIÓN DE EVENTOS (CLICK) ---
 document.addEventListener("click", (e: MouseEvent) => {
     const el = e.target as HTMLElement;
 
-    // 1. Lógica para Agregar
+    // 1. Lógica para Agregar al Carrito
     const btnAgregar = el.closest(".btn-agregar") as HTMLButtonElement;
     if (btnAgregar) {
         const id = Number(btnAgregar.dataset.id);
@@ -118,28 +107,28 @@ document.addEventListener("click", (e: MouseEvent) => {
             const item = getCarrito().find(i => i.id === id);
 
             if (item) {
-                // Quitamos el clear para ver el historial de clics
                 console.log(`Producto: ${item.nombre} | Cantidad: ${item.cantidad} | Total: $${item.total}`);
             }
         }
-        return; // Salimos para no evaluar filtros si ya clickeamos un botón
+        return; 
     }
     
-    // 2. Lógica para Filtros
-    const enlaceFiltro = el.closest(".link-filtro"); // Usar una clase específica es más seguro que solo "a"
-    const filtroId = enlaceFiltro?.getAttribute("data-id");
-    
+    // 2. Lógica para Filtros de Categorías
+    const enlaceFiltro = el.closest("a"); 
+    const filtroId = enlaceFiltro?.dataset.id;
+
     if (enlaceFiltro && filtroId) {
         e.preventDefault();
+        
         const filtrados = filtroId === "todos" 
             ? PRODUCTS 
             : PRODUCTS.filter(p => p.categorias.some(c => c.id.toString() === filtroId));
             
         mostrarMenu(filtrados);
+        console.log(`Filtrando por: ${filtroId}`);
     }
 });
 
 // Inicialización
-// Usamos directamente PRODUCTS que es lo que viene del archivo del profe
 cargarCategorias(PRODUCTS);
 mostrarMenu(PRODUCTS);
