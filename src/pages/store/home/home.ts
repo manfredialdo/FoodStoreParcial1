@@ -1,7 +1,8 @@
 // lógica: render, búsqueda, filtros
 import type { Product as IProduct } from "../../../types/product";
 import type { Icategoria as ICategory } from "../../../types/categoria";
-import { agregarProductoAlCarrito } from "../../../utils/localStorage";
+import { agregarProductoAlCarrito, getCarrito } from "../../../utils/localStorage";
+// import { getCarrito } from "../../../utils/localStorage";
 
 // 2. Datos (sin el .ts al final)
 import { PRODUCTS } from "../../../data/data";
@@ -106,32 +107,30 @@ const mostrarMenu = (datos: IProduct[]): void => {
 document.addEventListener("click", (e: MouseEvent) => {
     const el = e.target as HTMLElement;
 
-    // 1. Lógica para Agregar al Carrito
-    // Usamos closest por si el usuario toca el icono "+" dentro del botón
+    // 1. Lógica para Agregar
     const btnAgregar = el.closest(".btn-agregar") as HTMLButtonElement;
-    
     if (btnAgregar) {
         const id = Number(btnAgregar.dataset.id);
-        
-        // Buscamos el objeto completo en el array de productos
         const productoParaAgregar = PRODUCTS.find(p => p.id === id);
 
         if (productoParaAgregar) {
-            // Guardamos en LocalStorage (la función que hicimos en el otro archivo)
             agregarProductoAlCarrito(productoParaAgregar);
-            
-            // Avisamos al usuario
-            alert(`Producto añadido: ${productoParaAgregar.nombre}`);
+            const item = getCarrito().find(i => i.id === id);
+
+            if (item) {
+                // Quitamos el clear para ver el historial de clics
+                console.log(`Producto: ${item.nombre} | Cantidad: ${item.cantidad} | Total: $${item.total}`);
+            }
         }
+        return; // Salimos para no evaluar filtros si ya clickeamos un botón
     }
     
-    // 2. Lógica para Filtros de Categorías
-    const enlaceFiltro = el.closest("a");
-    const filtroId = enlaceFiltro?.dataset.id;
+    // 2. Lógica para Filtros
+    const enlaceFiltro = el.closest(".link-filtro"); // Usar una clase específica es más seguro que solo "a"
+    const filtroId = enlaceFiltro?.getAttribute("data-id");
     
-    if (filtroId) {
+    if (enlaceFiltro && filtroId) {
         e.preventDefault();
-        
         const filtrados = filtroId === "todos" 
             ? PRODUCTS 
             : PRODUCTS.filter(p => p.categorias.some(c => c.id.toString() === filtroId));
