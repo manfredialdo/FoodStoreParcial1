@@ -1,93 +1,83 @@
+// /home/user/FoodStoreParcial1/src/pages/store/cart/cart.ts
 // lógica: render, cantidades, total
+// parcial 1 aldo manfredi
 import { getCarrito, saveCarrito } from "../../../utils/localStorage";
+import type { ICarritoItem } from "../../../types/carrito"; // Asegúrate de tener este tipo
 
-const contenedor = document.getElementById("contenedor-carrito");
-const totalTxt = document.getElementById("total-final");
-const subtotalTxt = document.getElementById("subtotal");
+/**
+ * FABRICA: Crea la tarjeta de un producto dentro del carrito
+ */
+const crearItemCarrito = (item: ICarritoItem): HTMLElement => {
+    const precio = item.precioUnidad || 0;
+    const subtotalItem = precio * item.cantidad;
 
+    const card = document.createElement("article");
+    card.className = "tarjeta";
+
+    // Estructura fija del carrito
+    card.innerHTML = `
+        <h3 class="tarjeta-titulo"></h3>
+        <p class="tarjeta-descripcion info-precios"></p>
+        
+        <div class="tarjeta-footer">
+            <button class="btn-agregar" data-id="${item.id}" data-op="restar">-</button>
+            <span class="cantidad-display" style="font-weight: bold;"></span>
+            <button class="btn-agregar" data-id="${item.id}" data-op="sumar">+</button>
+        </div>
+
+        <div class="tarjeta-footer" style="margin-top: 10px;">
+            <button class="btn-agregar btn-eliminar" data-id="${item.id}" 
+                    style="background: var(--color-primario); width: 100%; justify-content: center;">
+                Quitar del pedido
+            </button>
+        </div>
+    `;
+
+    // Asignación segura de textos
+    card.querySelector(".tarjeta-titulo")!.textContent = item.nombre;
+    card.querySelector(".info-precios")!.textContent = `Unitario: $${precio} | Subtotal: $${subtotalItem}`;
+    card.querySelector(".cantidad-display")!.textContent = item.cantidad.toString();
+
+    return card;
+};
+
+/**
+ * RENDER: Dibuja el carrito y calcula totales
+ */
 const renderCarrito = () => {
-    const carrito = getCarrito();
-    
-    if (!contenedor || !totalTxt || !subtotalTxt) return;
-    contenedor.replaceChildren();
+    const contenedor = document.getElementById("contenedor-carrito");
+    const totalTxt = document.getElementById("total-final");
+    const subtotalTxt = document.getElementById("subtotal");
 
+    if (!contenedor || !totalTxt || !subtotalTxt) return;
+
+    const carrito = getCarrito();
+
+    // Caso carrito vacío
     if (carrito.length === 0) {
-        const msg = document.createElement("p");
-        msg.className = "tarjeta-descripcion";
-        msg.textContent = "Tu carrito está vacío.";
-        contenedor.append(msg);
+        contenedor.innerHTML = `<p class="tarjeta-descripcion">Tu carrito está vacío.</p>`;
         totalTxt.textContent = "$0";
         subtotalTxt.textContent = "$0";
         return;
     }
 
-    let acumulado = 0;
+    // Calcular acumulado
+    const acumulado = carrito.reduce((acc, item) => acc + (item.precioUnidad || 0) * item.cantidad, 0);
 
-    carrito.forEach(item => {
-        const precio = item.precioUnidad || 0;
-        const subtotalItem = precio * item.cantidad;
-        acumulado += subtotalItem;
-        
-        const card = document.createElement("article");
-        card.className = "tarjeta"; 
-
-        // Título y Precio en la parte superior
-        const h3 = document.createElement("h3");
-        h3.className = "tarjeta-titulo";
-        h3.textContent = item.nombre;
-
-        const info = document.createElement("p");
-        info.className = "tarjeta-descripcion";
-        info.textContent = `Unitario: $${precio} | Subtotal: $${subtotalItem}`;
-
-        // Contenedor de controles (usamos tarjeta-footer porque ya tiene flex)
-        const footerControles = document.createElement("div");
-        footerControles.className = "tarjeta-footer";
-
-        const btnRestar = document.createElement("button");
-        btnRestar.className = "btn-agregar";
-        btnRestar.textContent = "-";
-        btnRestar.dataset.id = item.id.toString();
-        btnRestar.dataset.op = "restar";
-
-        const spanCant = document.createElement("span");
-        spanCant.textContent = item.cantidad.toString();
-        spanCant.style.fontWeight = "bold";
-
-        const btnSumar = document.createElement("button");
-        btnSumar.className = "btn-agregar";
-        btnSumar.textContent = "+";
-        btnSumar.dataset.id = item.id.toString();
-        btnSumar.dataset.op = "sumar";
-
-        footerControles.append(btnRestar, spanCant, btnSumar);
-
-        // Botón eliminar (en un contenedor separado para que no se pegue)
-        const footerAcciones = document.createElement("div");
-        footerAcciones.className = "tarjeta-footer";
-        footerAcciones.style.marginTop = "10px";
-
-        const btnEliminar = document.createElement("button");
-        btnEliminar.className = "btn-agregar";
-        btnEliminar.textContent = "Quitar del pedido";
-        btnEliminar.dataset.id = item.id.toString();
-        btnEliminar.style.background = "var(--color-primario)";
-        btnEliminar.style.width = "100%"; // Para que ocupe todo el ancho abajo
-        btnEliminar.style.justifyContent = "center";
-
-        footerAcciones.append(btnEliminar);
-
-        card.append(h3, info, footerControles, footerAcciones);
-        contenedor.append(card);
-    });
+    // Renderizar todas las tarjetas de un golpe
+    contenedor.replaceChildren(...carrito.map(crearItemCarrito));
 
     totalTxt.textContent = `$${acumulado}`;
     subtotalTxt.textContent = `$${acumulado}`;
 };
 
-document.addEventListener("click", (e) => {
+/**
+ * EVENTOS: Delegación de clicks
+ */
+document.addEventListener("click", (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     
+    // 1. Vaciar Carrito
     if (target.id === "btn-vaciar") {
         saveCarrito([]);
         renderCarrito();
@@ -100,6 +90,7 @@ document.addEventListener("click", (e) => {
     const id = Number(btn.dataset.id);
     let carrito = getCarrito();
 
+    // 2. Sumar o Restar
     if (btn.dataset.op) {
         const op = btn.dataset.op;
         carrito = carrito.map(item => {
@@ -110,7 +101,9 @@ document.addEventListener("click", (e) => {
             }
             return item;
         });
-    } else if (btn.textContent?.includes("Quitar")) {
+    } 
+    // 3. Eliminar (Detectamos por la clase que agregamos en la fábrica)
+    else if (btn.classList.contains("btn-eliminar")) {
         carrito = carrito.filter(item => item.id !== id);
     }
 
@@ -118,4 +111,5 @@ document.addEventListener("click", (e) => {
     renderCarrito();
 });
 
+// Inicio
 renderCarrito();

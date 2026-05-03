@@ -1,4 +1,4 @@
-// src/main.ts
+// /src/main.ts
 import type { IUser } from "./types/IUser";
 
 const checkAuth = (): void => {

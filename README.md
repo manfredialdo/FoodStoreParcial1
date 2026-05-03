@@ -51,7 +51,7 @@ cd FoodStoreParcial1
 Si no tienes `pnpm` instalado, puedes hacerlo fácilmente a través de `npm` (que viene con Node.js) ejecutando el siguiente comando en tu terminal:
 
 ```bash
-npm install pnpm
+npm -g install pnpm
 ```
 
 ### 2. Instalar Dependencias del Proyecto
@@ -111,23 +111,23 @@ El flujo de compra es reactivo y utiliza la API de `localStorage` para garantiza
 │   ├── data/
 │   │   └── data.ts              # parcial1: Fuente de datos: PRODUCTS y getCategories()
 │   ├── pages/
-│   │   ├── admin/               # tp4: Vistas y lógica exclusivas para administradores
-│   │   ├── auth/                # tp4: Gestión de autenticación (Login, Registro)
-│   │   ├── client/              # tp4: Vistas privadas para clientes registrados
+│   │   ├── admin/                           # tp4: Vistas y lógica exclusivas para administradores
+│   │   ├── auth/                            # tp4: Gestión de autenticación (Login, Registro)
+│   │   ├── client/                          # tp4: Vistas privadas para clientes registrados
 │   │   └── store/               # parcial1: Módulos públicos de la tienda
 │   │       ├── home/
-│   │       │   ├── home.html    # tp4: Maquetación del catálogo de productos
-│   │       │   └── home.ts      # tp4: Lógica: renderizado, búsqueda y filtros
+│   │       │   ├── home.html                # tp4: Maquetación del catálogo de productos
+│   │       │   └── home.ts                  # tp4: Lógica: renderizado, búsqueda y filtros
 │   │       └── cart/
 │   │           ├── cart.html    # parcial1: Vista del carrito de compras
 │   │           └── cart.ts      # parcial1: Lógica: gestión de cantidades, totales y pedidos
 │   ├── types/                   # parcial1: Definición de interfaces y tipos globales
 │   │   ├── product.ts           # parcial1: Interfaces Product y CartItem
 │   │   ├── categoria.ts         # parcial1: Interface ICategoria
-│   │   └── user.ts              # tp4: Interfaces IUser y Rol
+│   │   └── user.ts                          # tp4: Interfaces IUser y Rol
 │   └── utils/                   # Funciones auxiliares y lógica reutilizable
-│       ├── auth.ts              # tp4: Verificación de rol, sesión y permisos
-│       ├── localStorage.ts      # parcial1: Persistencia de datos (Carrito, Token, Usuario)
+│       ├── auth.ts                          # tp4: Verificación de rol, sesión y permisos
+│       ├── localStorage.ts      # parcial1: Persistencia de datos (Carrito, Token, Usuario) y tp4
 │       └── navigate.ts          # Centralización de rutas y redirecciones
 ├── package.json                 # Scripts y dependencias del proyecto
 └── README.md                    # Documentación principal```
