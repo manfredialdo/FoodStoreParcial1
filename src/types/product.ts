@@ -1,3 +1,4 @@
+// /home/user/FoodStoreParcial1/src/types/product.ts
 //  interfaces Product y CartItem
 /**
  * Interfaz principal para los Productos del catálogo

@@ -1,3 +1,4 @@
+// /home/user/FoodStoreParcial1/src/utils/localStorage.ts
 import type { Product as IProduct, ICartItem } from "../types/product"; // Importación actualizada
 import type { IUser } from "../types/IUser";
 
@@ -49,23 +50,40 @@ export function agregarProductoAlCarrito(producto: IProduct): void {
 
 // --- FUNCIONES DE USUARIOS Y SESIÓN ---
 
-export function getUsuarios(): any[] {
+/**
+ * Obtiene la lista global de usuarios registrados
+ */
+export function getUsuarios(): IUser[] {
     const data = localStorage.getItem("users");
-    return data ? JSON.parse(data) : [];
+    return data ? (JSON.parse(data) as IUser[]) : [];
 }
 
-export function saveListaUsuarios(usuarios: any[]): void {
+/**
+ * Guarda la lista actualizada de usuarios
+ */
+export function saveListaUsuarios(usuarios: IUser[]): void {
     localStorage.setItem("users", JSON.stringify(usuarios));
 }
 
+/**
+ * Guarda el usuario que inició sesión actualmente
+ */
 export function saveUser(user: IUser): void {
     localStorage.setItem("userData", JSON.stringify(user));
 }
 
-export function getUSer(): string | null {
-    return localStorage.getItem("userData");
+/**
+ * Obtiene los datos del usuario logueado. 
+ * Corregido para que devuelva el objeto IUser parseado en lugar de un string crudo.
+ */
+export function getLoggedUser(): IUser | null {
+    const data = localStorage.getItem("userData");
+    return data ? (JSON.parse(data) as IUser) : null;
 }
 
+/**
+ * Elimina la sesión del usuario (Logout)
+ */
 export function removeUser(): void {
     localStorage.removeItem("userData");
 }
