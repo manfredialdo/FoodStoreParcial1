@@ -1,5 +1,5 @@
 // /home/user/FoodStoreParcial1/src/utils/localStorage.ts
-import type { Product as IProduct, ICartItem } from "../types/product"; // Importación actualizada
+import type { Product as IProduct, ICartItem } from "../types/product"; 
 import type { IUser } from "../types/IUser";
 
 // --- FUNCIONES DEL CARRITO ---
@@ -9,7 +9,7 @@ import type { IUser } from "../types/IUser";
  */
 export function getCarrito(): ICartItem[] {
     const data = localStorage.getItem("carrito");
-    return data ? JSON.parse(data) : [];
+    return data ? (JSON.parse(data) as ICartItem[]) : [];
 }
 
 /**
@@ -24,16 +24,17 @@ export function saveCarrito(carrito: ICartItem[]): void {
  */
 export function agregarProductoAlCarrito(producto: IProduct): void {
     const carrito = getCarrito();
-    
-    const itemExistente = carrito.find(function(item) {
-        return item.id === producto.id;
-    });
+    const itemExistente = carrito.find(item => item.id === producto.id);
 
     if (itemExistente) {
-        itemExistente.cantidad++; 
-        itemExistente.total = itemExistente.precioUnidad * itemExistente.cantidad;
-        
-        console.table(`Actualizando: ${itemExistente.nombre} x${itemExistente.cantidad}. Total: $${itemExistente.total}`);
+        if (itemExistente.cantidad < producto.stock) {
+            itemExistente.cantidad++; 
+            itemExistente.total = itemExistente.precioUnidad * itemExistente.cantidad;
+            // console.table(`Actualizando: ${itemExistente.nombre} x${itemExistente.cantidad}. Total: $${itemExistente.total}`);
+        } else {
+            alert(`No hay más stock disponible de ${producto.nombre}`);
+            return; // Salimos sin guardar si no hay stock
+        }
     } else {
         const nuevoItem: ICartItem = {
             id: producto.id,
@@ -44,12 +45,10 @@ export function agregarProductoAlCarrito(producto: IProduct): void {
         };
         carrito.push(nuevoItem);
     }
-
     saveCarrito(carrito);
 }
 
 // --- FUNCIONES DE USUARIOS Y SESIÓN ---
-
 /**
  * Obtiene la lista global de usuarios registrados
  */
