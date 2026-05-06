@@ -20,14 +20,6 @@ Vale decir, por otro lado q el presente proyecto es una continuacion trabajo pra
 En el presente proyecto se implementa como demostración educativa para ilustrar la implementación de un carrito de compras funcional en el lado del cliente (frontend). El objetivo principal es mostrar cómo gestionar el estado de los productos seleccionados y garantizar la persistencia de datos utilizando el localStorage del navegador.
 
 
-## ⚠️ ¡Importante! Nivel de Seguridad
-
-La protección de rutas implementada en este proyecto **NO ES SEGURA** y no debe utilizarse en un entorno de producción.
-
-- **Razón**: La lógica de autenticación se basa en datos guardados en `localStorage` en el navegador del usuario.
-- **Riesgo**: Cualquier usuario con conocimientos técnicos básicos puede abrir las herramientas de desarrollador del navegador para inspeccionar, modificar o eliminar los datos de `localStorage`, obteniendo así acceso no autorizado a rutas protegidas.
-
-Este enfoque es útil únicamente para fines de aprendizaje y para prototipos de bajo riesgo. La seguridad real debe implementarse en el **backend**.
 
 ---
 
@@ -75,23 +67,39 @@ La aplicación estará disponible en la URL que aparezca en la terminal (general
 
 
 ---
+# 📝 Documentación del Proyecto
 
-## 🛒 ¿Cómo Funciona la Gestión del Carrito?
+## 📦 ¿Cómo Funciona la Gestión del Catálogo?
+El catálogo es el motor visual de la tienda. Su funcionamiento se basa en la **renderización dinámica** y el **filtrado en tiempo real** mediante TypeScript[cite: 1]:
 
-El flujo de compra es reactivo y utiliza la API de `localStorage` para garantizar la persistencia de datos de forma eficiente:
+### 1. Renderización Basada en Datos
+* **Generación de Interfaz**: El sistema recorre el array central de productos (`PRODUCTS`) y, mediante una función constructora de HTML, genera "tarjetas" dinámicas en el DOM[cite: 1].
+* **Validaciones de Seguridad**: Cada tarjeta incluye controles lógicos; por ejemplo, si un producto no tiene stock, el botón de compra se deshabilita automáticamente (usando la propiedad `disabled` de `HTMLButtonElement`) para mejorar la experiencia del usuario[cite: 1].
 
-1. **Captura**: Al disparar el evento de clic en "Agregar", el sistema extrae el `ID` del producto mediante el atributo `data-id` del elemento HTML.
+### 2. Búsqueda e Interacción
+* **Eventos en Tiempo Real**: Utiliza eventos de tipo `input` en elementos `HTMLInputElement` para filtrar la lista de productos mientras el usuario escribe[cite: 1].
+* **Motor de Filtrado**: El motor de búsqueda compara el texto ingresado con los nombres de los productos utilizando métodos de cadena (`includes`) y actualiza el DOM de forma inmediata[cite: 1].
 
-2. **Persistencia**:
-   * Se recupera el estado actual mediante la función `getCarrito()`.
-   * **Lógica de Acumulación**: Si el `ID` ya existe en el storage, se incrementa su propiedad `cantidad`. De lo contrario, se inicializa como un nuevo ítem.
-   * El array resultante se serializa a JSON y se almacena nuevamente en `localStorage`.
+### 3. Sistema de Categorías
+* **Extracción Automática**: Las categorías se generan automáticamente extrayendo los valores únicos de la base de datos de productos[cite: 1].
+* **Sincronización**: Esto garantiza que el menú lateral siempre esté sincronizado con los productos disponibles sin necesidad de actualizaciones manuales en el código[cite: 1].
 
-3. **Renderizado Dinámico**: La vista de **"Mis Pedidos"** mapea el contenido del storage para generar las tarjetas mediante la manipulación segura del DOM (`createElement`)
+---
 
-4. **Cálculo de Importes**: Se procesa cada subtotal (`precioUnidad * cantidad`) y se utiliza un acumulador para proyectar el **Total Final** en tiempo real.
+## 💳 ¿Cómo Funciona la Gestión del Carrito?
+La gestión del carrito garantiza la **persistencia** e **integridad** de la compra mediante tres pilares fundamentales:
 
-5. **Sincronización**: Cualquier interacción con los controles de cantidad o eliminación de ítems actualiza el storage y fuerza un re-renderizado inmediato de la interfaz.
+### 1. Persistencia Local (LocalStorage)
+* **Almacenamiento de Datos**: Toda la información del carrito se almacena en el navegador del usuario en formato **JSON**[cite: 1].
+* **Continuidad de Sesión**: Esto permite que el usuario no pierda sus productos si refresca la página o cierra la sesión, utilizando funciones de sincronización como `getCarrito` y `saveCarrito`[cite: 1].
+
+### 2. Validación Estricta de Stock
+* **Doble Verificación**: Antes de agregar un producto o incrementar su cantidad, el sistema realiza un chequeo cruzado entre el elemento del carrito (`ICartItem`) y el stock real disponible en la base de datos original[cite: 1].
+* **Prevención de Excesos**: Si se intenta superar el límite de stock, el sistema bloquea la acción mediante un `alert` y evita que la cantidad aumente indebidamente[cite: 1].
+
+### 3. Cálculo Dinámico
+* **Recálculo Automático**: El carrito actualiza subtotales y totales finales cada vez que se detecta un cambio (sumar, restar o eliminar un producto)[cite: 1].
+* **Procesamiento Eficiente**: Se utiliza el método `.reduce()` para procesar el acumulado económico de forma eficiente y limpia, asegurando que el total mostrado sea siempre exacto[cite: 1].
 
 ---
 
