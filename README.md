@@ -1,9 +1,8 @@
-#  PARCIAL 1 PROGRAMACION 3 Proyecto: Carrito + Protección de Rutas (Educativo) 
 
-# 🛒 FOOD STORE PARCIAL 1 Aldo Manfredi
+# FOOD STORE PARCIAL 1 Aldo Manfredi
 
 ## 📋 Resumen del Proyecto
-Esta aplicación es una solución de comercio electrónico diseñada para ofrecer una experiencia de compra fluida, rápida y segura. El sistema gestiona automáticamente todo el flujo de venta, desde la exhibición de productos hasta el cálculo final de la compra.
+Esta aplicación es una posible solución del parcial 1 programacion 3 de la utn TUPAD, diseñada para ofrecer una experiencia de compra fluida, rápida y segura. El sistema gestiona automáticamente todo el flujo de venta, desde la exhibición de productos hasta el cálculo final de la compra... Las consignas en el pdf
 
 ## 🛠️ Funcionalidades Implementadas
 
@@ -33,13 +32,13 @@ Esta aplicación es una solución de comercio electrónico diseñada para ofrece
 │   ├── data/
 │   │   └── data.ts              # parcial1: Fuente de datos: PRODUCTS y getCategories()
 │   ├── pages/
-│   │   ├── admin/                           # tp4: Vistas y lógica exclusivas para administradores
-│   │   ├── auth/                            # tp4: Gestión de autenticación (Login, Registro)
-│   │   ├── client/                          # tp4: Vistas privadas para clientes registrados
+│   │   ├── admin/                           
+│   │   ├── auth/                            
+│   │   ├── client/                          
 │   │   └── store/               # parcial1: Módulos públicos de la tienda
 │   │       ├── home/
-│   │       │   ├── home.html                # tp4: Maquetación del catálogo de productos
-│   │       │   └── home.ts                  # tp4: Lógica: renderizado, búsqueda y filtros
+│   │       │   ├── home.html    # parcial1: Maquetación del catálogo de productos
+│   │       │   └── home.ts      # p arcial 1: Lógica: renderizado, búsqueda y filtros
 │   │       └── cart/
 │   │           ├── cart.html    # parcial1: Vista del carrito de compras
 │   │           └── cart.ts      # parcial1: Lógica: gestión de cantidades, totales y pedidos
