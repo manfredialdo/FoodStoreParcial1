@@ -1,6 +1,8 @@
 import type { IUser } from "../types/IUser";
 import type { Rol } from "../types/Rol";
-import { getUSer, removeUser } from "./localStorage";
+// import { getUSer, removeUser } from "./localStorage";
+// POR ESTO:
+import { getLoggedUser as getUSer, removeUser } from "./localStorage";
 import { navigate } from "./navigate";
 
 export const checkAuhtUser = (
