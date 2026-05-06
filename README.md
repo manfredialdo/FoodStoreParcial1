@@ -76,7 +76,7 @@ cd FoodStoreParcial1
 Si no tienes `pnpm` instalado, puedes hacerlo fácilmente a través de `npm` (que viene con Node.js) ejecutando el siguiente comando en tu terminal:
 
 ```bash
-npm -g install pnpm
+npm install -g pnpm@latest-10
 ```
 
 ### 2. Instalar Dependencias del Proyecto
@@ -92,7 +92,7 @@ pnpm install
 Para iniciar el servidor de desarrollo de Vite, ejecuta:
 
 ```bash
-pnpm dev
+pnpm run dev
 ```
 
 
