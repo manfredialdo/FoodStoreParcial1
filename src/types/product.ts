@@ -28,3 +28,12 @@ export interface Product {
 export interface CartItem extends Product {
   quantity: number; 
 }
+
+
+export interface ICartItem {
+  id: number;
+  nombre: string;
+  precioUnidad: number;
+  cantidad: number;
+  total: number;
+}

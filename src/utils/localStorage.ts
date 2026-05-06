@@ -1,40 +1,39 @@
-import type { Product as IProduct } from "../types/product";
+import type { Product as IProduct, ICartItem } from "../types/product"; // Importación actualizada
 import type { IUser } from "../types/IUser";
 
-
 // --- FUNCIONES DEL CARRITO ---
-// 1. ACTUALIZAMOS LA INTERFAZ (Agregamos los campos que faltaban)
-export interface ICartItem {
-    id: number;
-    nombre: string;
-    precioUnidad: number;
-    cantidad: number;
-    total: number;
-}
 
-export const getCarrito = (): ICartItem[] => {
+/**
+ * Obtiene el carrito desde localStorage
+ */
+export function getCarrito(): ICartItem[] {
     const data = localStorage.getItem("carrito");
     return data ? JSON.parse(data) : [];
-};
+}
 
-export const saveCarrito = (carrito: ICartItem[]): void => {
+/**
+ * Guarda el array del carrito en localStorage
+ */
+export function saveCarrito(carrito: ICartItem[]): void {
     localStorage.setItem("carrito", JSON.stringify(carrito));
-};
+}
 
-export const agregarProductoAlCarrito = (producto: IProduct): void => {
+/**
+ * Agrega un producto o incrementa su cantidad si ya existe
+ */
+export function agregarProductoAlCarrito(producto: IProduct): void {
     const carrito = getCarrito();
     
-    // Ahora TypeScript sabe que 'item' tiene total y precioUnidad
-    const itemExistente = carrito.find(item => item.id === producto.id);
+    const itemExistente = carrito.find(function(item) {
+        return item.id === producto.id;
+    });
 
     if (itemExistente) {
         itemExistente.cantidad++; 
-        // Actualizamos el total usando el precioUnidad que ya guardamos
         itemExistente.total = itemExistente.precioUnidad * itemExistente.cantidad;
         
         console.log(`Actualizando: ${itemExistente.nombre} x${itemExistente.cantidad}. Total: $${itemExistente.total}`);
     } else {
-        // Creamos el nuevo item respetando la interfaz
         const nuevoItem: ICartItem = {
             id: producto.id,
             nombre: producto.nombre,
@@ -46,29 +45,27 @@ export const agregarProductoAlCarrito = (producto: IProduct): void => {
     }
 
     saveCarrito(carrito);
-};
+}
 
-// ---------------------------------
-// --- FUNCIONES TP4 ----
-// --- FUNCIONES DE USUARIOS ---
-export const getUsuarios = (): any[] => {
+// --- FUNCIONES DE USUARIOS Y SESIÓN ---
+
+export function getUsuarios(): any[] {
     const data = localStorage.getItem("users");
     return data ? JSON.parse(data) : [];
-};
+}
 
-export const saveListaUsuarios = (usuarios: any[]) => {
+export function saveListaUsuarios(usuarios: any[]): void {
     localStorage.setItem("users", JSON.stringify(usuarios));
-};
+}
 
-// --- FUNCIONES DE SESIÓN ---
-export const saveUser = (user: IUser) => {
+export function saveUser(user: IUser): void {
     localStorage.setItem("userData", JSON.stringify(user));
-};
+}
 
-export const getUSer = () => {
+export function getUSer(): string | null {
     return localStorage.getItem("userData");
-};
+}
 
-export const removeUser = () => {
+export function removeUser(): void {
     localStorage.removeItem("userData");
-};
+}

@@ -1,15 +1,22 @@
 // /home/user/FoodStoreParcial1/src/pages/store/cart/cart.ts
 // lógica: render, cantidades, total
 // parcial 1 aldo manfredi
+// /home/user/FoodStoreParcial1/src/pages/store/cart/cart.ts
+// lógica: render, cantidades, total
+// parcial 1 aldo manfredi
 import { getCarrito, saveCarrito } from "../../../utils/localStorage";
 import type { ICarritoItem } from "../../../types/carrito";
 
-const crearItemCarrito = (item: ICarritoItem): HTMLElement => {
-    // ... (este código queda igual, está perfecto)
+/**
+ * CREAR ITEM CARRITO
+ * Genera el elemento HTML para un producto dentro del carrito
+ */
+function crearItemCarrito(item: ICarritoItem): HTMLElement {
     const precio = item.precioUnidad || 0;
     const subtotalItem = precio * item.cantidad;
     const card = document.createElement("article");
     card.className = "tarjeta";
+    
     card.innerHTML = `
         <h3 class="tarjeta-titulo"></h3>
         <p class="tarjeta-descripcion info-precios"></p>
@@ -25,13 +32,19 @@ const crearItemCarrito = (item: ICarritoItem): HTMLElement => {
             </button>
         </div>
     `;
+
     card.querySelector(".tarjeta-titulo")!.textContent = item.nombre;
     card.querySelector(".info-precios")!.textContent = `Unitario: $${precio} | Subtotal: $${subtotalItem}`;
     card.querySelector(".cantidad-display")!.textContent = item.cantidad.toString();
+    
     return card;
-};
+}
 
-const renderCarrito = () => {
+/**
+ * RENDER CARRITO
+ * Actualiza la vista del carrito y los totales
+ */
+function renderCarrito(): void {
     const contenedor = document.getElementById("contenedor-carrito");
     const totalTxt = document.getElementById("total-final");
     const subtotalTxt = document.getElementById("subtotal");
@@ -51,9 +64,12 @@ const renderCarrito = () => {
 
     totalTxt.textContent = `$${acumulado}`;
     subtotalTxt.textContent = `$${acumulado}`;
-};
+}
 
-document.addEventListener("click", (e: MouseEvent) => {
+/**
+ * EVENTOS: DELEGACIÓN DE CLIC
+ */
+document.addEventListener("click", function (e: MouseEvent): void {
     const target = e.target as HTMLElement;
     
     if (target.id === "btn-vaciar") {
@@ -71,7 +87,7 @@ document.addEventListener("click", (e: MouseEvent) => {
 
     if (btn.dataset.op) {
         const op = btn.dataset.op;
-        carrito = carrito.map(item => {
+        carrito = carrito.map(function (item) {
             if (item.id === id) {
                 if (op === "sumar") item.cantidad++;
                 if (op === "restar" && item.cantidad > 1) item.cantidad--;
@@ -81,11 +97,14 @@ document.addEventListener("click", (e: MouseEvent) => {
         });
     } 
     else if (btn.classList.contains("btn-eliminar")) {
-        carrito = carrito.filter(item => item.id !== id);
+        carrito = carrito.filter(function (item) {
+            return item.id !== id;
+        });
     }
 
     saveCarrito(carrito);
     renderCarrito();
 });
 
+// Inicialización
 renderCarrito();
