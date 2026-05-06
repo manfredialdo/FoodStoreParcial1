@@ -1,11 +1,9 @@
 // /home/user/FoodStoreParcial1/src/pages/store/cart/cart.ts
 // lógica: render, cantidades, total
 // parcial 1 aldo manfredi
-// /home/user/FoodStoreParcial1/src/pages/store/cart/cart.ts
-// lógica: render, cantidades, total
-// parcial 1 aldo manfredi
 import { getCarrito, saveCarrito } from "../../../utils/localStorage";
 import type { ICarritoItem } from "../../../types/carrito";
+import { PRODUCTS } from "../../../data/data";
 
 /**
  * CREAR ITEM CARRITO
@@ -89,13 +87,23 @@ document.addEventListener("click", function (e: MouseEvent): void {
         const op = btn.dataset.op;
         carrito = carrito.map(function (item) {
             if (item.id === id) {
-                if (op === "sumar") item.cantidad++;
-                if (op === "restar" && item.cantidad > 1) item.cantidad--;
+                if (op === "sumar") {
+                    // Buscamos el producto original en la "base de datos" para ver su stock
+                    const productoOriginal = PRODUCTS.find(p => p.id === id);
+                    if (productoOriginal && item.cantidad < productoOriginal.stock) {
+                        item.cantidad++;
+                    } else {
+                        alert("Se ha alcanzado el límite de stock disponible.");
+                    }
+                }
+                if (op === "restar" && item.cantidad > 1) {
+                    item.cantidad--;
+                }
                 item.total = (item.precioUnidad || 0) * item.cantidad;
             }
             return item;
         });
-    } 
+    }
     else if (btn.classList.contains("btn-eliminar")) {
         carrito = carrito.filter(function (item) {
             return item.id !== id;

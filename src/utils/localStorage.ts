@@ -32,7 +32,7 @@ export function agregarProductoAlCarrito(producto: IProduct): void {
         itemExistente.cantidad++; 
         itemExistente.total = itemExistente.precioUnidad * itemExistente.cantidad;
         
-        console.log(`Actualizando: ${itemExistente.nombre} x${itemExistente.cantidad}. Total: $${itemExistente.total}`);
+        console.table(`Actualizando: ${itemExistente.nombre} x${itemExistente.cantidad}. Total: $${itemExistente.total}`);
     } else {
         const nuevoItem: ICartItem = {
             id: producto.id,

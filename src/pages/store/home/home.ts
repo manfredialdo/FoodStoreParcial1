@@ -49,7 +49,7 @@ function cargarCategorias(productos: IProduct[]): void {
 function crearTarjeta(p: IProduct): HTMLElement {
     const tarjeta = document.createElement("article");
     tarjeta.className = "tarjeta";
-    console.log(`Renderizando tarjeta: ${p.nombre} | Imagen: /${p.imagen}`);
+    // console.log(`Renderizando tarjeta: ${p.nombre} | Imagen: /${p.imagen}`);
 
     tarjeta.innerHTML = `
         <img class="tarjeta-img" src="/${p.imagen}" alt="${p.nombre}">
@@ -93,18 +93,23 @@ document.addEventListener("click", function(e: MouseEvent) {
     if (btnAgregar) {
         const id = Number(btnAgregar.dataset.id);
         const productoParaAgregar = PRODUCTS.find(p => p.id === id);
-
+    
         if (productoParaAgregar) {
-            agregarProductoAlCarrito(productoParaAgregar);
-            const item = getCarrito().find(i => i.id === id);
-
-            if (item) {
-                console.log(`Producto: ${item.nombre} | Cantidad: ${item.cantidad} | Total: $${item.total}`);
+            // --- VALIDACIÓN DE STOCK ---
+            const carritoActual = getCarrito();
+            const itemEnCarrito = carritoActual.find(i => i.id === id);
+            const cantidadEnCarrito = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+    
+            if (cantidadEnCarrito < productoParaAgregar.stock) {
+                agregarProductoAlCarrito(productoParaAgregar);
+                alert(`¡${productoParaAgregar.nombre} agregado!`);
+            } else {
+                alert(`Lo sentimos, no hay más stock de ${productoParaAgregar.nombre} (Máximo: ${productoParaAgregar.stock})`);
             }
         }
-        return; 
+        return;
     }
-    
+
     const enlaceFiltro = el.closest("a"); 
     const filtroId = enlaceFiltro?.dataset.id;
 
@@ -116,7 +121,7 @@ document.addEventListener("click", function(e: MouseEvent) {
             : PRODUCTS.filter(p => p.categorias.some(c => c.id.toString() === filtroId));
 
         mostrarMenu(filtrados);
-        console.log(`Filtrando por: ${filtroId}`);
+        // console.log(`Filtrando por: ${filtroId}`);
     }
 });
 
@@ -131,7 +136,7 @@ formBusqueda?.addEventListener("input", function(e) {
         p.nombre.toLowerCase().includes(busqueda)
     );
     
-    console.log(`Buscando: "${busqueda}" | Coincidencias: ${resultados.length}`);
+    // console.log(`Buscando: "${busqueda}" | Coincidencias: ${resultados.length}`);
 
     const contenedor = document.getElementById("contenedor-productos");
     if (!contenedor) return;
@@ -147,7 +152,7 @@ formBusqueda?.addEventListener("input", function(e) {
     }
 });
 
-console.table(PRODUCTS);
+// console.table(PRODUCTS);
 
 // Inicialización
 cargarCategorias(PRODUCTS);
