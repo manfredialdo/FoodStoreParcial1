@@ -1,5 +1,5 @@
 // /home/user/FoodStoreParcial1/src/pages/store/cart/cart.ts
-// lógica: render, cantidades, total
+// lógica: render, cantidades, total optimizada
 // parcial 1 aldo manfredi
 import { getCarrito, saveCarrito } from "../../../utils/localStorage";
 import type { ICartItem } from "../../../types/product";
@@ -7,11 +7,10 @@ import { PRODUCTS } from "../../../data/data";
 
 /**
  * CREAR ITEM CARRITO
- * Genera el elemento HTML para un producto dentro del carrito
  */
 function crearItemCarrito(item: ICartItem): HTMLElement {
-    const precio = item.precioUnidad || 0;
-    const subtotalItem = precio * item.cantidad;
+    const precio = item.precioUnidad;
+    const subtotalItem = item.total; // Usamos la propiedad total que ya existe en el objeto
     const card = document.createElement("article");
     card.className = "tarjeta";
     
@@ -35,12 +34,12 @@ function crearItemCarrito(item: ICartItem): HTMLElement {
     card.querySelector(".info-precios")!.textContent = `Unitario: $${precio} | Subtotal: $${subtotalItem}`;
     card.querySelector(".cantidad-display")!.textContent = item.cantidad.toString();
     
+    // console.log(`Item renderizado: ${item.nombre} x${item.cantidad}`);
     return card;
 }
 
 /**
  * RENDER CARRITO
- * Actualiza la vista del carrito y los totales
  */
 function renderCarrito(): void {
     const contenedor = document.getElementById("contenedor-carrito");
@@ -48,26 +47,29 @@ function renderCarrito(): void {
     const subtotalTxt = document.getElementById("subtotal");
 
     if (!contenedor || !totalTxt || !subtotalTxt) return;
-    const carrito = getCarrito() as ICartItem[];
+    
+    const carrito = getCarrito(); // TS ya sabe que devuelve ICartItem[]
 
     if (carrito.length === 0) {
         contenedor.innerHTML = `<p class="tarjeta-descripcion">Tu carrito está vacío.</p>`;
-        totalTxt.textContent = "$0";
-        subtotalTxt.textContent = "$0";
+        totalTxt.textContent = subtotalTxt.textContent = "$0";
         return;
     }
 
-    const acumulado = carrito.reduce((acc, item) => acc + (item.precioUnidad || 0) * item.cantidad, 0);
-    contenedor.replaceChildren(...carrito.map(crearItemCarrito));
+    // Sumamos directamente los totales de cada item
+    const acumulado = carrito.reduce((acc, item) => acc + item.total, 0);
+    const formatoPrecio = `$${acumulado}`;
 
-    totalTxt.textContent = `$${acumulado}`;
-    subtotalTxt.textContent = `$${acumulado}`;
+    contenedor.replaceChildren(...carrito.map(crearItemCarrito));
+    totalTxt.textContent = subtotalTxt.textContent = formatoPrecio;
+    
+    // console.log("Carrito actualizado. Total final:", acumulado);
 }
 
 /**
  * EVENTOS: DELEGACIÓN DE CLIC
  */
-document.addEventListener("click", function (e: MouseEvent): void {
+document.addEventListener("click", (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     
     if (target.id === "btn-vaciar") {
@@ -80,34 +82,33 @@ document.addEventListener("click", function (e: MouseEvent): void {
     if (!btn || !btn.dataset.id) return;
 
     const id = Number(btn.dataset.id);
-    
-    let carrito = getCarrito() as ICartItem[];
+    let carrito = getCarrito();
+    const op = btn.dataset.op;
 
-    if (btn.dataset.op) {
-        const op = btn.dataset.op;
-        carrito = carrito.map(function (item) {
+    if (op) {
+        // Si vamos a sumar, buscamos el producto original UNA sola vez aquí
+        const productoOriginal = op === "sumar" ? PRODUCTS.find(p => p.id === id) : null;
+
+        carrito = carrito.map(item => {
             if (item.id === id) {
                 if (op === "sumar") {
-                    // Buscamos el producto original en la "base de datos" para ver su stock
-                    const productoOriginal = PRODUCTS.find(p => p.id === id);
                     if (productoOriginal && item.cantidad < productoOriginal.stock) {
                         item.cantidad++;
                     } else {
-                        alert("Se ha alcanzado el límite de stock disponible.");
+                        alert(`Límite de stock: ${productoOriginal?.stock || 0} unidades.`);
                     }
-                }
-                if (op === "restar" && item.cantidad > 1) {
+                } else if (op === "restar" && item.cantidad > 1) {
                     item.cantidad--;
                 }
-                item.total = (item.precioUnidad || 0) * item.cantidad;
+                item.total = item.precioUnidad * item.cantidad;
             }
             return item;
         });
-    }
+        // console.log(`Operación ${op} realizada sobre ID: ${id}`);
+    } 
     else if (btn.classList.contains("btn-eliminar")) {
-        carrito = carrito.filter(function (item) {
-            return item.id !== id;
-        });
+        carrito = carrito.filter(item => item.id !== id);
+        // console.log(`Producto ID ${id} eliminado del carrito`);
     }
 
     saveCarrito(carrito);

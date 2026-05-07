@@ -1,13 +1,12 @@
 // src/pages/store/home/home.ts 
 // Food Store Parcial 1, vista catalogo
 // lógica: render, búsqueda, filtros
-import type { Product as IProduct } from "../../../types/product";
 import { agregarProductoAlCarrito, getCarrito } from "../../../utils/localStorage";
 import { PRODUCTS } from "../../../data/data";
+import type { Product as IProduct } from "../../../types/product";
 
 const formBusqueda = document.getElementById("form-busqueda") as HTMLFormElement;
 const inputBusqueda = document.getElementById("input-busqueda") as HTMLInputElement;
-
 /**
  * MENU CATEGORIAS
  */
@@ -24,7 +23,7 @@ function crearItemCategoria(id: string, nombre: string): HTMLLIElement {
 }
 
 /**
- * Carga o renderiza las categorías en el menú
+ * Carga las categorías en el menú
  */
 function cargarCategorias(productos: IProduct[]): void {
     const ul = document.getElementById("lista-categorias") as HTMLUListElement;
@@ -153,9 +152,7 @@ formBusqueda?.addEventListener("input", function(e) {
         contenedor.append(mensaje);
     }
 });
-
 // console.table(PRODUCTS);
-
 // Inicialización
 cargarCategorias(PRODUCTS);
 mostrarMenu(PRODUCTS);
