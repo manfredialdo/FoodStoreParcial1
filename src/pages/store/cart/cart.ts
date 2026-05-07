@@ -56,7 +56,7 @@ function renderCarrito(): void {
         return;
     }
 
-    // Sumamos directamente los totales de cada item
+    // Sumo los totales de cada item
     const acumulado = carrito.reduce((acc, item) => acc + item.total, 0);
     const formatoPrecio = `$${acumulado}`;
 
@@ -86,7 +86,7 @@ document.addEventListener("click", (e: MouseEvent) => {
     const op = btn.dataset.op;
 
     if (op) {
-        // Si vamos a sumar, buscamos el producto original UNA sola vez aquí
+        // al sumar se busca el producto original 1 sola vez
         const productoOriginal = op === "sumar" ? PRODUCTS.find(p => p.id === id) : null;
 
         carrito = carrito.map(item => {
