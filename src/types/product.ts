@@ -22,19 +22,13 @@ export interface Product {
   alt?: string;
 }
 
-/**
- * Interfaz para el Carrito (Extiende de Product)
- * Hereda todo lo de Product y le agrega la propiedad de cantidad
- */
-export interface CartItem extends Product {
-  quantity: number; 
-}
-
 
 export interface ICartItem {
   id: number;
   nombre: string;
-  precioUnidad: number;
-  cantidad: number;
-  total: number;
+  precioUnidad: number; // El precio base del producto
+  cantidad: number;     // Cuántos lleva el usuario
+  total: number;        // subtotal calculado (precioUnidad * cantidad)
+  imagen: string;       // Para mostrar la foto también en el carrito
+  categorias: Icategoria[]; // Para mantener la coherencia con el producto original
 }

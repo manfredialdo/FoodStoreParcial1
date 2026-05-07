@@ -34,6 +34,7 @@ function cargarCategorias(productos: IProduct[]): void {
     const unicas = todasLasCategorias.filter((cat, index, self) => 
         index === self.findIndex(c => c.id === cat.id)
     );
+    // console.log("Todas las categorías extraídas:", todasLasCategorias);
 
     const items = [
         crearItemCategoria("todos", "Todos"),
@@ -68,6 +69,7 @@ function crearTarjeta(p: IProduct): HTMLElement {
     tarjeta.querySelector(".tarjeta-titulo")!.textContent = p.nombre;
     tarjeta.querySelector(".tarjeta-descripcion")!.textContent = p.descripcion;
     tarjeta.querySelector(".tarjeta-precio")!.textContent = `$${p.precio}`;
+    console.log(tarjeta)
 
     return tarjeta;
 }

@@ -2,14 +2,14 @@
 // lógica: render, cantidades, total
 // parcial 1 aldo manfredi
 import { getCarrito, saveCarrito } from "../../../utils/localStorage";
-import type { ICarritoItem } from "../../../types/carrito";
+import type { ICartItem } from "../../../types/product";
 import { PRODUCTS } from "../../../data/data";
 
 /**
  * CREAR ITEM CARRITO
  * Genera el elemento HTML para un producto dentro del carrito
  */
-function crearItemCarrito(item: ICarritoItem): HTMLElement {
+function crearItemCarrito(item: ICartItem): HTMLElement {
     const precio = item.precioUnidad || 0;
     const subtotalItem = precio * item.cantidad;
     const card = document.createElement("article");
@@ -48,7 +48,7 @@ function renderCarrito(): void {
     const subtotalTxt = document.getElementById("subtotal");
 
     if (!contenedor || !totalTxt || !subtotalTxt) return;
-    const carrito = getCarrito() as ICarritoItem[];
+    const carrito = getCarrito() as ICartItem[];
 
     if (carrito.length === 0) {
         contenedor.innerHTML = `<p class="tarjeta-descripcion">Tu carrito está vacío.</p>`;
@@ -81,7 +81,7 @@ document.addEventListener("click", function (e: MouseEvent): void {
 
     const id = Number(btn.dataset.id);
     
-    let carrito = getCarrito() as ICarritoItem[];
+    let carrito = getCarrito() as ICartItem[];
 
     if (btn.dataset.op) {
         const op = btn.dataset.op;
