@@ -41,7 +41,6 @@ export function agregarProductoAlCarrito(producto: IProduct): void {
             precioUnidad: producto.precio,
             cantidad: 1,
             total: producto.precio,
-            // AGREGAMOS LO QUE FALTA:
             imagen: producto.imagen,
             categorias: producto.categorias
         };
