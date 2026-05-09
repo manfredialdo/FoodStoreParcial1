@@ -68,7 +68,7 @@ function crearTarjeta(p: IProduct): HTMLElement {
     tarjeta.querySelector(".tarjeta-titulo")!.textContent = p.nombre;
     tarjeta.querySelector(".tarjeta-descripcion")!.textContent = p.descripcion;
     tarjeta.querySelector(".tarjeta-precio")!.textContent = `$${p.precio}`;
-    console.log(tarjeta)
+    // console.log(tarjeta)
 
     return tarjeta;
 }
@@ -152,7 +152,7 @@ formBusqueda?.addEventListener("input", function(e) {
         contenedor.append(mensaje);
     }
 });
-// console.table(PRODUCTS);
+console.table(PRODUCTS);
 // Inicialización
 cargarCategorias(PRODUCTS);
 mostrarMenu(PRODUCTS);

@@ -77,6 +77,7 @@ document.addEventListener("click", (e: MouseEvent) => {
         renderCarrito();
         return;
     }
+    
 
     const btn = target.closest("button");
     if (!btn || !btn.dataset.id) return;

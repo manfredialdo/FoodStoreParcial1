@@ -1,6 +1,10 @@
 
 # FOOD STORE PARCIAL 1 Aldo Manfredi
 
+
+link al video de presentación: https://youtu.be/XF0q6AEczp4
+
+
 ## 📋 Resumen del Proyecto
 Esta aplicación es una posible solución del parcial 1 programacion 3 de la utn TUPAD, diseñada para ofrecer una experiencia de compra fluida, rápida y segura. El sistema gestiona automáticamente todo el flujo de venta, desde la exhibición de productos hasta el cálculo final de la compra... Las consignas en el pdf
 
